@@ -2,7 +2,10 @@ package com.dataanalysis;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DataFrame {
@@ -139,6 +142,44 @@ public class DataFrame {
         }
         return rowData;
     }
-
+    // Méthode pour obtenir une colonne spécifique du DataFrame en fonction de son libellé
+    public List<Object> getColumn(String label) {
+        List<Object> columnData = new ArrayList<>();
+        int columnIndex = columns.indexOf(label);
+        if (columnIndex != -1) {
+            columnData = data.get(columnIndex);
+        } else {
+            System.out.println("Column with label " + label + " not found.");
+        }
+        return columnData;
+    }
+    // Méthode pour lire un DataFrame à partir d'un fichier CSV
+    public static DataFrame readCSV(String filePath) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(filePath));
+        List<String> columns = new ArrayList<>();
+        List<List<Object>> data = new ArrayList<>();
+        
+        // Ignorer la première ligne (ligne d'en-tête)
+        String headerLine = reader.readLine();
+        String[] header = headerLine.split(",");
+    
+        // Ajouter les colonnes à partir de la ligne d'en-tête
+        columns.addAll(Arrays.asList(header));
+    
+        // Lire les lignes de données restantes
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] values = line.split(",");
+            List<Object> rowData = new ArrayList<>();
+            for (String value : values) {
+                // Ajouter la valeur à la ligne de données sans conversion de type
+                rowData.add(value);
+            }
+            data.add(rowData);
+        }
+    
+        reader.close();
+        return new DataFrame(columns, data);
+    }
     // Autres méthodes pour d'autres statistiques (min, max, etc.) peuvent être ajoutées ici, elles seront réalisées si le temps nous le permet
 }

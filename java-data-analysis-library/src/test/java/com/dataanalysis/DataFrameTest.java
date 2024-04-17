@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
+import java.io.IOException;
+import static org.junit.Assert.fail;
 
 public class DataFrameTest {
     private DataFrame df;
@@ -58,6 +60,28 @@ public class DataFrameTest {
         // assertEquals(df.getColumn("B").min(), "bar"); // Minimum de la colonne "B"
         // assertEquals(df.getColumn("C").max(), 6.7, 0.01); // Maximum de la colonne "C"
     }
-
+    @Test
+    public void testReadCSV() {
+        // Chemin relatif du fichier CSV dans le répertoire resources
+        String csvFilePath = System.getProperty("user.dir") + "/src/test/resources/data.csv";
+    
+        try {
+            // Création d'un DataFrame en lisant le fichier CSV
+            DataFrame df = DataFrame.readCSV(csvFilePath);
+            
+            // Vérification que le DataFrame n'est pas null
+            assertNotNull(df);
+            
+            // Vérification que le DataFrame contient les bonnes données
+            assertEquals(df.getColumnCount(), 3);
+            assertEquals(df.getRowCount(), 3);
+            assertEquals(df.getColumn("A").get(0), Integer.toString(1)); // On s'attend à un entier
+            assertEquals(df.getColumn("B").get(0), Integer.toString(2));
+            assertEquals(df.getColumn("C").get(0), Integer.toString(3)); // On s'attend à un double
+        } catch (IOException e) {
+            fail("IOException occurred: " + e.getMessage());
+        }
+    }
+    
 
 }
