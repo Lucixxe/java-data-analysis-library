@@ -9,8 +9,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DataFrame {
-    private List<String> columns;
-    private List<List<Object>> data;
+    private List<String> columns ;
+    private List<List<Object>> data ;
 
     public DataFrame() {
         this.columns = new ArrayList<>();
@@ -159,7 +159,7 @@ public class DataFrame {
         List<String> columns = new ArrayList<>();
         List<List<Object>> data = new ArrayList<>();
         
-        // Ignorer la première ligne (ligne d'en-tête)
+        // Ignorer la première ligne (ligne d'en-tête )
         String headerLine = reader.readLine();
         String[] header = headerLine.split(",");
     
